@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bruno.javafx.controllers.InsertViewController">
+    <children>
+        <TableView fx:id="tableViewMilk" prefHeight="200.0" prefWidth="200.0">
+            <columns>
+                <TableColumn fx:id="tableColumnDate" prefWidth="189.0" text="Data" />
+                <TableColumn fx:id="tableColumnQuantity" prefWidth="141.0" text="Quantia" />
+            </columns>
+        </TableView>
+    </children>
+</VBox>

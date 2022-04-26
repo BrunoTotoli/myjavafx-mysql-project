@@ -4,6 +4,14 @@ module com.example.javafxmyproject {
 
 
     opens com.bruno.javafx to javafx.fxml;
-    opens com.bruno.javafx.controllers;
     exports com.bruno.javafx;
+    exports com.bruno.javafx.controllers;
+    opens com.bruno.javafx.controllers;
+    opens com.bruno.javafx.model.entities;
+    opens com.bruno.javafx.model.services;
+
+
+
+
+
 }
