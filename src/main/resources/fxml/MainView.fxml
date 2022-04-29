@@ -7,41 +7,20 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="506.0"
-            prefWidth="790.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.bruno.javafx.controllers.MainViewController">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="506.0" prefWidth="790.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bruno.javafx.controllers.MainViewController">
     <content>
         <VBox prefHeight="200.0" prefWidth="557.0">
             <children>
                 <MenuBar>
                     <menus>
-                        <Menu mnemonicParsing="false" text="New">
+                        <Menu fx:id="menuItemShowData" mnemonicParsing="false" onAction="#onMenuItemShowData" text="ShowData">
                             <items>
-                                <MenuItem fx:id="menuItemInsert" mnemonicParsing="false" onAction="#onMenuItemInsert"
-                                          text="NewDay"/>
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Update">
-                            <items>
-                                <MenuItem fx:id="menuItemUpdate" mnemonicParsing="false" onAction="#onMenuItemUpdate"
-                                          text="Update"/>
-                            </items>
-                        </Menu>
-                        <Menu mnemonicParsing="false" text="Delete">
-                            <items>
-                                <MenuItem fx:id="menuItemDelete" mnemonicParsing="false" onAction="#onMenuItemDelete"
-                                          text="Delete"/>
-                            </items>
-                        </Menu>
-                        <Menu fx:id="menuItemShowData" mnemonicParsing="false" onAction="#onMenuItemShowData"
-                              text="ShowData">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="Action 1"/>
+                                <MenuItem mnemonicParsing="false" text="ShowData" />
                             </items>
                         </Menu>
                     </menus>
                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </padding>
                 </MenuBar>
             </children>

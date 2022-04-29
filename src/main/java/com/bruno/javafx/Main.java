@@ -13,7 +13,7 @@ public class Main extends Application {
     private static Scene mainScene;
 
     @Override
-    public void start(Stage stage){
+    public void start(Stage stage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
             ScrollPane scrollPane = fxmlLoader.load();
@@ -31,6 +31,7 @@ public class Main extends Application {
     public static Scene getMainScene() {
         return mainScene;
     }
+
 
     public static void main(String[] args) {
         launch();

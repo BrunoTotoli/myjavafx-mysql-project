@@ -11,7 +11,4 @@ module com.example.javafxmyproject {
     opens com.bruno.javafx.model.services;
 
 
-
-
-
 }
