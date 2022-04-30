@@ -7,15 +7,15 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="506.0" prefWidth="790.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bruno.javafx.controllers.MainViewController">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="328.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.bruno.javafx.controllers.MainViewController">
     <content>
         <VBox prefHeight="200.0" prefWidth="557.0">
             <children>
                 <MenuBar>
                     <menus>
-                        <Menu fx:id="menuItemShowData" mnemonicParsing="false" onAction="#onMenuItemShowData" text="ShowData">
+                        <Menu mnemonicParsing="false" text="ShowData">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="ShowData" />
+                                <MenuItem fx:id="menuItemShowData" mnemonicParsing="false" onAction="#onMenuItemShowData" text="ShowData" />
                             </items>
                         </Menu>
                     </menus>

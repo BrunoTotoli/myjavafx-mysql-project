@@ -1,6 +1,8 @@
 module com.example.javafxmyproject {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
+    requires mysql.connector.java;
 
 
     opens com.bruno.javafx to javafx.fxml;

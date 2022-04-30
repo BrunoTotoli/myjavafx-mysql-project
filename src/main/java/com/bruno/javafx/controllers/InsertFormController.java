@@ -1,8 +1,11 @@
 package com.bruno.javafx.controllers;
 
+import com.bruno.javafx.gui.listeners.DataChangeListener;
 import com.bruno.javafx.model.entities.Milk;
 import com.bruno.javafx.model.services.MilkService;
 import com.bruno.javafx.util.Constraints;
+import com.bruno.javafx.util.Utils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -15,11 +18,17 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.TemporalField;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
 public class InsertFormController implements Initializable {
+
+    private MilkService service;
+    private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
+
 
     @FXML
     private DatePicker datePickerDate;
@@ -34,16 +43,18 @@ public class InsertFormController implements Initializable {
     private Button buttonCancel;
 
     @FXML
-    private void onButtonSave() {
+    private void onButtonSave(ActionEvent event) {
+        if(datePickerDate != null){
             Milk milk = new Milk(Date.from(datePickerDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), Double.parseDouble(textFieldQuantity.getText()));
-            MilkService milkService = new MilkService();
-            milkService.addList(milk);
-            System.out.println(milk);
+            service.addList(milk);
+            notifyDataChangeListeners();
+            Utils.currentStage(event).close();
+        }
     }
 
     @FXML
-    private void onButtonCancel() {
-
+    private void onButtonCancel(ActionEvent actionEvent) {
+        Utils.currentStage(actionEvent).close();
     }
 
     @Override
@@ -53,7 +64,21 @@ public class InsertFormController implements Initializable {
 
     private void initializeNodes() {
         Constraints.setTextFieldDouble(textFieldQuantity);
+        Utils.formatDatePicker(datePickerDate,"dd/MM/yyyy");
     }
 
 
+    public void subscribeDataChangeListener(DataChangeListener listener) {
+        dataChangeListeners.add(listener);
+    }
+
+    private void notifyDataChangeListeners() {
+        for (DataChangeListener listener : dataChangeListeners) {
+            listener.onDataChanged();
+        }
+    }
+
+    public void setService(MilkService service) {
+        this.service = service;
+    }
 }

@@ -1,6 +1,7 @@
 package com.bruno.javafx.controllers;
 
 import com.bruno.javafx.Main;
+import com.bruno.javafx.gui.listeners.DataChangeListener;
 import com.bruno.javafx.model.entities.Milk;
 import com.bruno.javafx.model.services.MilkService;
 import com.bruno.javafx.util.Alerts;
@@ -24,11 +25,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class InsertViewController implements Initializable {
+public class InsertViewController implements Initializable, DataChangeListener {
 
     ObservableList<Milk> obsList;
     private MilkService service;
@@ -61,6 +63,7 @@ public class InsertViewController implements Initializable {
         tableColumnQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         Stage stage = (Stage) Main.getMainScene().getWindow();
         tableViewMilk.prefHeightProperty().bind(stage.heightProperty());
+        Utils.formatTableColumnDate(tableColumnDate,"dd/MM/yyyy");
     }
 
     public void updateTableView() {
@@ -69,7 +72,6 @@ public class InsertViewController implements Initializable {
         }
         List<Milk> list = null;
         list = service.getList();
-
         obsList = FXCollections.observableArrayList(list);
         tableViewMilk.setItems(obsList);
     }
@@ -78,6 +80,11 @@ public class InsertViewController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             Pane pane = loader.load();
+
+            InsertFormController controller = loader.getController();
+            controller.setService(new MilkService());
+            controller.subscribeDataChangeListener(this);
+
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Enter Milk Data");
@@ -96,4 +103,11 @@ public class InsertViewController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeNodes();
     }
+
+    @Override
+    public void onDataChanged() {
+        updateTableView();
+    }
+
+
 }
