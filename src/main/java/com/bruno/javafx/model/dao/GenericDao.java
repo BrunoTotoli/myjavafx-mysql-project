@@ -9,4 +9,6 @@ public interface GenericDao<T> {
 
     List<T> findAll();
 
+    List<T> findSpecifiedMonth(int month);
+
 }

@@ -5,7 +5,7 @@ import com.bruno.javafx.gui.listeners.DataChangeListener;
 import com.bruno.javafx.model.dao.DaoFactoryGeneric;
 import com.bruno.javafx.model.dao.GenericDao;
 import com.bruno.javafx.model.entities.Milk;
-import com.bruno.javafx.model.entities.Months;
+import com.bruno.javafx.model.enums.Months;
 import com.bruno.javafx.model.services.MilkService;
 import com.bruno.javafx.gui.util.Alerts;
 import com.bruno.javafx.gui.util.Utils;
@@ -29,9 +29,9 @@ import java.util.*;
 
 public class InsertViewController implements Initializable, DataChangeListener {
 
-    ObservableList<Milk> obsList;
-    ObservableList<Months> obsMonthList;
-    List<Months> listMonths = Arrays.asList(Months.values());
+    private ObservableList<Milk> obsList;
+    private ObservableList<Months> obsMonthList;
+    private List<Months> listMonths = Arrays.asList(Months.values());
     private MilkService service;
     private GenericDao milkDao = DaoFactoryGeneric.createMilkDao();
 
@@ -50,7 +50,8 @@ public class InsertViewController implements Initializable, DataChangeListener {
 
 
     public void loadAssociatedObjects() {
-        obsMonthList = FXCollections.observableList(listMonths);;
+        obsMonthList = FXCollections.observableList(listMonths);
+        ;
         comboBoxMonths.setItems(obsMonthList);
     }
 
@@ -77,7 +78,7 @@ public class InsertViewController implements Initializable, DataChangeListener {
 
     @FXML
     private void onButtonMedia() {
-
+        updateTableViewMonth();
     }
 
     @FXML
@@ -100,7 +101,7 @@ public class InsertViewController implements Initializable, DataChangeListener {
 
     }
 
-    public void updateTableView() {
+    public void updateTableViewAll() {
         if (service == null) {
             throw new IllegalStateException("Service was null");
         }
@@ -140,7 +141,36 @@ public class InsertViewController implements Initializable, DataChangeListener {
 
     @Override
     public void onDataChanged() {
-        updateTableView();
+        updateTableViewAll();
+        updateTableViewMonth();
+    }
+
+    private void updateTableViewMonth() {
+
+        boolean isRunning = true;
+        Months month = null;
+        while (isRunning) {
+
+            for (int i = 0; i < listMonths.size(); i++) {
+                if (comboBoxMonths.getValue() == listMonths.get(0)) {
+                    updateTableViewAll();
+                }
+                if (comboBoxMonths.getValue() == listMonths.get(i)) {
+                    month = listMonths.get(i);
+                    if (service == null) {
+                        throw new IllegalStateException("Service was null");
+                    }
+                    List<Milk> list = null;
+                    list = milkDao.findSpecifiedMonth(month.getType());
+                    System.out.println(month);
+                    obsList = FXCollections.observableArrayList(list);
+                    tableViewMilk.setItems(obsList);
+                    isRunning = false;
+                }
+
+            }
+
+        }
     }
 
 

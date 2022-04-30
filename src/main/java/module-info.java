@@ -11,6 +11,7 @@ module com.example.javafxmyproject {
     opens com.bruno.javafx.controllers;
     opens com.bruno.javafx.model.entities;
     opens com.bruno.javafx.model.services;
+    opens com.bruno.javafx.model.enums;
 
 
 }

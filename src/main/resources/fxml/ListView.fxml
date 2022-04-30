@@ -21,7 +21,7 @@
         <items>
           <Button fx:id="buttonInsert" mnemonicParsing="false" onAction="#onButtonInsert" text="Insert" />
             <ComboBox fx:id="comboBoxMonths" prefWidth="150.0" />
-            <Button fx:id="buttonMedia" mnemonicParsing="false" onAction="#onButtonMedia" text="Media" />
+            <Button fx:id="buttonMedia" mnemonicParsing="false" onAction="#onButtonMedia" text="Atualizar" />
         </items>
          <VBox.margin>
             <Insets />

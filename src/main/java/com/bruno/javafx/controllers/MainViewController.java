@@ -27,7 +27,7 @@ public class MainViewController implements Initializable {
     private void onMenuItemShowData() {
         loadView("/fxml/ListView.fxml", (InsertViewController controller) -> {
             controller.setService(new MilkService());
-            controller.updateTableView();
+            controller.updateTableViewAll();
         });
     }
 

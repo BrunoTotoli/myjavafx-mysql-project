@@ -52,4 +52,26 @@ public class MilkDao implements GenericDao<Milk> {
         }
         return milkList;
     }
+    @Override
+    public List<Milk> findSpecifiedMonth(int month) {
+        List<Milk> milkList = new ArrayList<>();
+        try {
+            if (connection != null) {
+                PreparedStatement statement = connection.prepareStatement("select id,date_milk,quantity from milk where MONTH(date_milk)= ?");
+                statement.setInt(1, month);
+                ResultSet resultSet = statement.executeQuery();
+
+                while (resultSet.next()) {
+                    Milk milk = new Milk(resultSet.getDate("date_milk"), resultSet.getDouble("quantity"));
+                    milkList.add(milk);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new DBException(e.getMessage());
+        } finally {
+
+        }
+        return milkList;
+    }
 }
