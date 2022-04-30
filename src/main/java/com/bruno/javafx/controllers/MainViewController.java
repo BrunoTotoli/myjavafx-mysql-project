@@ -1,6 +1,9 @@
 package com.bruno.javafx.controllers;
 
 import com.bruno.javafx.Main;
+import com.bruno.javafx.model.dao.DaoFactoryGeneric;
+import com.bruno.javafx.model.dao.GenericDao;
+import com.bruno.javafx.model.dao.MilkDao;
 import com.bruno.javafx.model.services.MilkService;
 import com.bruno.javafx.gui.util.Alerts;
 import javafx.fxml.FXML;
@@ -27,6 +30,7 @@ public class MainViewController implements Initializable {
     private void onMenuItemShowData() {
         loadView("/fxml/ListView.fxml", (InsertViewController controller) -> {
             controller.setService(new MilkService());
+            controller.setMilkDao(DaoFactoryGeneric.createMilkDao());
             controller.updateTableViewAll();
         });
     }

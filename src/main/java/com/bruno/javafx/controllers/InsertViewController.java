@@ -26,6 +26,7 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InsertViewController implements Initializable, DataChangeListener {
 
@@ -33,7 +34,11 @@ public class InsertViewController implements Initializable, DataChangeListener {
     private ObservableList<Months> obsMonthList;
     private List<Months> listMonths = Arrays.asList(Months.values());
     private MilkService service;
-    private GenericDao milkDao = DaoFactoryGeneric.createMilkDao();
+    private GenericDao milkDao;
+
+    public void setMilkDao(GenericDao milkDao) {
+        this.milkDao = milkDao;
+    }
 
     public void setService(MilkService service) {
         this.service = service;
@@ -43,10 +48,21 @@ public class InsertViewController implements Initializable, DataChangeListener {
     private Button buttonInsert;
 
     @FXML
-    private Button buttonMedia;
+    private Button buttonAtualizar;
 
     @FXML
     private ComboBox<Months> comboBoxMonths;
+
+    @FXML
+    private Button buttonMedia;
+
+    @FXML
+    private void onButtonMedia() {
+        List<Milk> milkMonth = obsList;
+        double sum = milkMonth.stream().collect(Collectors.summingDouble(Milk::getQuantity)) / milkMonth.size();
+        System.out.println(sum);
+
+    }
 
 
     public void loadAssociatedObjects() {
@@ -77,7 +93,7 @@ public class InsertViewController implements Initializable, DataChangeListener {
     }
 
     @FXML
-    private void onButtonMedia() {
+    private void onButtonAtualizar() {
         updateTableViewMonth();
     }
 
@@ -104,6 +120,9 @@ public class InsertViewController implements Initializable, DataChangeListener {
     public void updateTableViewAll() {
         if (service == null) {
             throw new IllegalStateException("Service was null");
+        }
+        if (milkDao == null) {
+            throw new IllegalStateException("Dao was null");
         }
         List<Milk> list = null;
         list = milkDao.findAll();
@@ -146,6 +165,10 @@ public class InsertViewController implements Initializable, DataChangeListener {
     }
 
     private void updateTableViewMonth() {
+
+        if (milkDao == null) {
+            throw new IllegalStateException("Dao was null");
+        }
 
         boolean isRunning = true;
         Months month = null;
