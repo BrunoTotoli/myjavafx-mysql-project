@@ -5,6 +5,7 @@ import com.bruno.javafx.gui.listeners.DataChangeListener;
 import com.bruno.javafx.model.dao.DaoFactoryGeneric;
 import com.bruno.javafx.model.dao.GenericDao;
 import com.bruno.javafx.model.entities.Milk;
+import com.bruno.javafx.model.entities.Months;
 import com.bruno.javafx.model.services.MilkService;
 import com.bruno.javafx.gui.util.Alerts;
 import com.bruno.javafx.gui.util.Utils;
@@ -15,24 +16,22 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class InsertViewController implements Initializable, DataChangeListener {
 
     ObservableList<Milk> obsList;
+    ObservableList<Months> obsMonthList;
+    List<Months> listMonths = Arrays.asList(Months.values());
     private MilkService service;
     private GenericDao milkDao = DaoFactoryGeneric.createMilkDao();
 
@@ -44,10 +43,41 @@ public class InsertViewController implements Initializable, DataChangeListener {
     private Button buttonInsert;
 
     @FXML
+    private Button buttonMedia;
+
+    @FXML
+    private ComboBox<Months> comboBoxMonths;
+
+
+    public void loadAssociatedObjects() {
+        obsMonthList = FXCollections.observableList(listMonths);;
+        comboBoxMonths.setItems(obsMonthList);
+    }
+
+
+    private void initializeComboBoxDepartment() {
+        Callback<ListView<Months>, ListCell<Months>> factory = lv -> new ListCell<Months>() {
+            @Override
+            protected void updateItem(Months item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? "" : item.name());
+            }
+        };
+        comboBoxMonths.setCellFactory(factory);
+        comboBoxMonths.setButtonCell(factory.call(null));
+    }
+
+
+    @FXML
     private void onButtonInsert(ActionEvent event) {
         Stage stage = Utils.currentStage(event);
         createDialogForm("/fxml/InsertForm.fxml", stage);
         System.out.println("Insert Button");
+    }
+
+    @FXML
+    private void onButtonMedia() {
+
     }
 
     @FXML
@@ -60,11 +90,14 @@ public class InsertViewController implements Initializable, DataChangeListener {
     private TableColumn<Milk, Double> tableColumnQuantity;
 
     private void initializeNodes() {
+        loadAssociatedObjects();
+        initializeComboBoxDepartment();
         tableColumnDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         tableColumnQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         Stage stage = (Stage) Main.getMainScene().getWindow();
         tableViewMilk.prefHeightProperty().bind(stage.heightProperty());
         Utils.formatTableColumnDate(tableColumnDate, "dd/MM/yyyy");
+
     }
 
     public void updateTableView() {
