@@ -27,7 +27,7 @@
             <Insets bottom="5.0" top="5.0" />
          </padding>
       </ToolBar>
-        <TableView fx:id="tableViewMilk" prefHeight="347.0" prefWidth="328.0">
+        <TableView fx:id="tableViewMilk" prefHeight="347.0" prefWidth="328.0" style="-fx-background-color: transparent;">
             <columns>
                 <TableColumn fx:id="tableColumnDate" prefWidth="162.0" text="Data" />
                 <TableColumn fx:id="tableColumnQuantity" prefWidth="168.0" text="Quantia" />

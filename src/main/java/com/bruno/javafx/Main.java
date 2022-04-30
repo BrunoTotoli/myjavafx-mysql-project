@@ -21,6 +21,7 @@ public class Main extends Application {
             scrollPane.setFitToWidth(true);
             scrollPane.setFitToHeight(true);
             mainScene = new Scene(scrollPane);
+            mainScene.getStylesheets().add(getClass().getResource("/stylesheets/styles.css").toExternalForm());
             stage.setTitle("Milk");
             stage.setScene(mainScene);
             stage.show();
