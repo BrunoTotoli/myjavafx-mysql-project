@@ -2,10 +2,12 @@ package com.bruno.javafx.controllers;
 
 import com.bruno.javafx.Main;
 import com.bruno.javafx.gui.listeners.DataChangeListener;
+import com.bruno.javafx.model.dao.DaoFactoryGeneric;
+import com.bruno.javafx.model.dao.GenericDao;
 import com.bruno.javafx.model.entities.Milk;
 import com.bruno.javafx.model.services.MilkService;
-import com.bruno.javafx.util.Alerts;
-import com.bruno.javafx.util.Utils;
+import com.bruno.javafx.gui.util.Alerts;
+import com.bruno.javafx.gui.util.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,8 +26,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -34,6 +34,7 @@ public class InsertViewController implements Initializable, DataChangeListener {
 
     ObservableList<Milk> obsList;
     private MilkService service;
+    private GenericDao milkDao = DaoFactoryGeneric.createMilkDao();
 
     public void setService(MilkService service) {
         this.service = service;
@@ -63,7 +64,7 @@ public class InsertViewController implements Initializable, DataChangeListener {
         tableColumnQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         Stage stage = (Stage) Main.getMainScene().getWindow();
         tableViewMilk.prefHeightProperty().bind(stage.heightProperty());
-        Utils.formatTableColumnDate(tableColumnDate,"dd/MM/yyyy");
+        Utils.formatTableColumnDate(tableColumnDate, "dd/MM/yyyy");
     }
 
     public void updateTableView() {
@@ -71,7 +72,7 @@ public class InsertViewController implements Initializable, DataChangeListener {
             throw new IllegalStateException("Service was null");
         }
         List<Milk> list = null;
-        list = service.getList();
+        list = milkDao.findAll();
         obsList = FXCollections.observableArrayList(list);
         tableViewMilk.setItems(obsList);
     }

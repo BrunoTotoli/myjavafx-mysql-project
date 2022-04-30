@@ -1,4 +1,4 @@
-package com.bruno.javafx.util;
+package com.bruno.javafx.gui.util;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Node;

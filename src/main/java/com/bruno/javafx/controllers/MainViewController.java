@@ -2,7 +2,7 @@ package com.bruno.javafx.controllers;
 
 import com.bruno.javafx.Main;
 import com.bruno.javafx.model.services.MilkService;
-import com.bruno.javafx.util.Alerts;
+import com.bruno.javafx.gui.util.Alerts;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

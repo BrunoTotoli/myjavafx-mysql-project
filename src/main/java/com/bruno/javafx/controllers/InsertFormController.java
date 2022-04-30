@@ -1,10 +1,13 @@
 package com.bruno.javafx.controllers;
 
 import com.bruno.javafx.gui.listeners.DataChangeListener;
+import com.bruno.javafx.model.dao.DaoFactoryGeneric;
+import com.bruno.javafx.model.dao.GenericDao;
+import com.bruno.javafx.model.dao.MilkDao;
 import com.bruno.javafx.model.entities.Milk;
 import com.bruno.javafx.model.services.MilkService;
-import com.bruno.javafx.util.Constraints;
-import com.bruno.javafx.util.Utils;
+import com.bruno.javafx.gui.util.Constraints;
+import com.bruno.javafx.gui.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,11 +16,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.temporal.TemporalField;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +27,7 @@ public class InsertFormController implements Initializable {
 
     private MilkService service;
     private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
+    private GenericDao milkDao = DaoFactoryGeneric.createMilkDao();
 
 
     @FXML
@@ -44,9 +44,9 @@ public class InsertFormController implements Initializable {
 
     @FXML
     private void onButtonSave(ActionEvent event) {
-        if(datePickerDate != null){
+        if (datePickerDate != null) {
             Milk milk = new Milk(Date.from(datePickerDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()), Double.parseDouble(textFieldQuantity.getText()));
-            service.addList(milk);
+            milkDao.insert(milk);
             notifyDataChangeListeners();
             Utils.currentStage(event).close();
         }
@@ -64,7 +64,7 @@ public class InsertFormController implements Initializable {
 
     private void initializeNodes() {
         Constraints.setTextFieldDouble(textFieldQuantity);
-        Utils.formatDatePicker(datePickerDate,"dd/MM/yyyy");
+        Utils.formatDatePicker(datePickerDate, "dd/MM/yyyy");
     }
 
 

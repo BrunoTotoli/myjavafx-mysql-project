@@ -2,9 +2,7 @@ package com.bruno.javafx.db;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
 public class DB {
@@ -25,7 +23,7 @@ public class DB {
             }
 
         }
-        return null;
+        return connection;
     }
 
     private static Properties loadProperties() {
@@ -37,5 +35,29 @@ public class DB {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void closeStatement(PreparedStatement statement) {
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void closeResultSet(ResultSet resultSet) {
+        try {
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void closeConnection() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
