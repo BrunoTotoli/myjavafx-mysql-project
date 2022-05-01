@@ -71,8 +71,8 @@ public class InsertViewController implements Initializable, DataChangeListener {
     @FXML
     private void onButtonMedia() {
         List<Milk> milkMonth = obsList;
-        double sum = milkMonth.stream().collect(Collectors.summingDouble(Milk::getQuantity)) / 4;
-        Alerts.showAlert("Media: ", null, "Media: " + String.format("%.2f", sum), Alert.AlertType.INFORMATION);
+        double sum = milkMonth.stream().collect(Collectors.summingDouble(Milk::getQuantity));
+        Alerts.showAlert("Media: ", null, "TotalPart:" + sum + "\nOurPart: " + String.format("%.2f", sum / 4) + "\nMilkPrice in Month: " + String.format("%.2f", 2.49) + "\nValue: " + String.format("%.2f", ((sum / 4) * 2.49)), Alert.AlertType.INFORMATION);
 
     }
 
