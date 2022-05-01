@@ -2,7 +2,6 @@ package com.bruno.javafx.controllers;
 
 import com.bruno.javafx.Main;
 import com.bruno.javafx.gui.listeners.DataChangeListener;
-import com.bruno.javafx.model.dao.DaoFactoryGeneric;
 import com.bruno.javafx.model.dao.GenericDao;
 import com.bruno.javafx.model.entities.Milk;
 import com.bruno.javafx.model.enums.Months;
@@ -36,66 +35,18 @@ public class InsertViewController implements Initializable, DataChangeListener {
     private MilkService service;
     private GenericDao milkDao;
 
-    public void setMilkDao(GenericDao milkDao) {
-        this.milkDao = milkDao;
-    }
-
-    public void setService(MilkService service) {
-        this.service = service;
-    }
 
     @FXML
     private Button buttonInsert;
 
     @FXML
-    private Button buttonAtualizar;
-
-    @FXML
-    private ComboBox<Months> comboBoxMonths;
+    private Button buttonUpdate;
 
     @FXML
     private Button buttonMedia;
 
     @FXML
-    private void onButtonMedia() {
-        List<Milk> milkMonth = obsList;
-        double sum = milkMonth.stream().collect(Collectors.summingDouble(Milk::getQuantity)) / milkMonth.size();
-        System.out.println(sum);
-
-    }
-
-
-    public void loadAssociatedObjects() {
-        obsMonthList = FXCollections.observableList(listMonths);
-        ;
-        comboBoxMonths.setItems(obsMonthList);
-    }
-
-
-    private void initializeComboBoxDepartment() {
-        Callback<ListView<Months>, ListCell<Months>> factory = lv -> new ListCell<Months>() {
-            @Override
-            protected void updateItem(Months item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty ? "" : item.name());
-            }
-        };
-        comboBoxMonths.setCellFactory(factory);
-        comboBoxMonths.setButtonCell(factory.call(null));
-    }
-
-
-    @FXML
-    private void onButtonInsert(ActionEvent event) {
-        Stage stage = Utils.currentStage(event);
-        createDialogForm("/fxml/InsertForm.fxml", stage);
-        System.out.println("Insert Button");
-    }
-
-    @FXML
-    private void onButtonAtualizar() {
-        updateTableViewMonth();
-    }
+    private ComboBox<Months> comboBoxMonths;
 
     @FXML
     private TableView<Milk> tableViewMilk;
@@ -105,6 +56,30 @@ public class InsertViewController implements Initializable, DataChangeListener {
 
     @FXML
     private TableColumn<Milk, Double> tableColumnQuantity;
+
+    @FXML
+    private void onButtonInsert(ActionEvent event) {
+        Stage stage = Utils.currentStage(event);
+        createDialogForm("/fxml/InsertForm.fxml", stage);
+    }
+
+    @FXML
+    private void onButtonUpdate() {
+        updateTableViewMonth();
+    }
+
+    @FXML
+    private void onButtonMedia() {
+        List<Milk> milkMonth = obsList;
+        double sum = milkMonth.stream().collect(Collectors.summingDouble(Milk::getQuantity)) / 4;
+        Alerts.showAlert("Media: ", null, "Media: " + String.format("%.2f", sum), Alert.AlertType.INFORMATION);
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        initializeNodes();
+    }
 
     private void initializeNodes() {
         loadAssociatedObjects();
@@ -130,6 +105,23 @@ public class InsertViewController implements Initializable, DataChangeListener {
         tableViewMilk.setItems(obsList);
     }
 
+    public void loadAssociatedObjects() {
+        obsMonthList = FXCollections.observableList(listMonths);
+        comboBoxMonths.setItems(obsMonthList);
+    }
+
+    private void initializeComboBoxDepartment() {
+        Callback<ListView<Months>, ListCell<Months>> factory = lv -> new ListCell<Months>() {
+            @Override
+            protected void updateItem(Months item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? "" : item.name());
+            }
+        };
+        comboBoxMonths.setCellFactory(factory);
+        comboBoxMonths.setButtonCell(factory.call(null));
+    }
+
     private void createDialogForm(String absoluteName, Stage parentStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
@@ -138,7 +130,6 @@ public class InsertViewController implements Initializable, DataChangeListener {
             InsertFormController controller = loader.getController();
             controller.setService(new MilkService());
             controller.subscribeDataChangeListener(this);
-
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Enter Milk Data");
@@ -153,27 +144,14 @@ public class InsertViewController implements Initializable, DataChangeListener {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeNodes();
-    }
-
-    @Override
-    public void onDataChanged() {
-        updateTableViewAll();
-        updateTableViewMonth();
-    }
 
     private void updateTableViewMonth() {
-
+        boolean isRunning = true;
+        Months month = null;
         if (milkDao == null) {
             throw new IllegalStateException("Dao was null");
         }
-
-        boolean isRunning = true;
-        Months month = null;
         while (isRunning) {
-
             for (int i = 0; i < listMonths.size(); i++) {
                 if (comboBoxMonths.getValue() == listMonths.get(0)) {
                     updateTableViewAll();
@@ -185,16 +163,25 @@ public class InsertViewController implements Initializable, DataChangeListener {
                     }
                     List<Milk> list = null;
                     list = milkDao.findSpecifiedMonth(month.getType());
-                    System.out.println(month);
                     obsList = FXCollections.observableArrayList(list);
                     tableViewMilk.setItems(obsList);
                     isRunning = false;
                 }
-
             }
-
         }
     }
 
+    public void setMilkDao(GenericDao milkDao) {
+        this.milkDao = milkDao;
+    }
 
+    public void setService(MilkService service) {
+        this.service = service;
+    }
+
+    @Override
+    public void onDataChanged() {
+        updateTableViewAll();
+        updateTableViewMonth();
+    }
 }
