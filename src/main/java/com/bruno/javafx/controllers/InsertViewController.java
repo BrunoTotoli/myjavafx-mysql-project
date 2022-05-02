@@ -4,6 +4,7 @@ import com.bruno.javafx.Main;
 import com.bruno.javafx.gui.listeners.DataChangeListener;
 import com.bruno.javafx.model.dao.GenericDao;
 import com.bruno.javafx.model.entities.Milk;
+import com.bruno.javafx.model.entities.PriceMonthMilk;
 import com.bruno.javafx.model.enums.Months;
 import com.bruno.javafx.model.services.MilkService;
 import com.bruno.javafx.gui.util.Alerts;
@@ -34,6 +35,7 @@ public class InsertViewController implements Initializable, DataChangeListener {
     private List<Months> listMonths = Arrays.asList(Months.values());
     private MilkService service;
     private GenericDao milkDao;
+    private Map<Months, PriceMonthMilk> priceMilks2022 = new HashMap<>();
 
 
     @FXML
@@ -71,8 +73,12 @@ public class InsertViewController implements Initializable, DataChangeListener {
     @FXML
     private void onButtonMedia() {
         List<Milk> milkMonth = obsList;
+        createPriceMonthMilk(milkMonth.get(0));
         double sum = milkMonth.stream().collect(Collectors.summingDouble(Milk::getQuantity));
-        Alerts.showAlert("Media: ", null, "TotalPart:" + sum + "\nOurPart: " + String.format("%.2f", sum / 4) + "\nMilkPrice in Month: " + String.format("%.2f", 2.49) + "\nValue: " + String.format("%.2f", ((sum / 4) * 2.49)), Alert.AlertType.INFORMATION);
+        Alerts.showAlert("Media: ", null, "TotalPart:" + sum + "\nOurPart: " +
+                String.format("%.2f", sum / 4) + "\nMilkPrice in Month: " +
+                String.format("%.2f", 2.49) + "\nValue: " +
+                String.format("%.2f", ((sum / 4) * 2.49)), Alert.AlertType.INFORMATION);
 
     }
 
@@ -169,6 +175,24 @@ public class InsertViewController implements Initializable, DataChangeListener {
                 }
             }
         }
+    }
+
+    private void createPriceMonthMilk(Milk milk) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(milk.getDate());
+        if (comboBoxMonths.getValue() == listMonths.get(0) || comboBoxMonths.getValue() == null) {
+            System.out.println("NADA A SER CRIADO NA LISTA TODOS");
+        } else {
+            if (!priceMilks2022.containsKey(Months.getByIntValueMonth(calendar.get(Calendar.MONTH) + 1))) {
+                PriceMonthMilk priceMonthMilk = new PriceMonthMilk(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, 2.49);
+                priceMilks2022.put(Months.getByIntValueMonth(priceMonthMilk.getMonth()), priceMonthMilk);
+                System.out.println(priceMilks2022.toString());
+            } else {
+                System.out.println("Contains Key");
+            }
+        }
+
+
     }
 
     public void setMilkDao(GenericDao milkDao) {

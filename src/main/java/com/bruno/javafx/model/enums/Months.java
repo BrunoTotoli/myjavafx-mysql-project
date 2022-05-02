@@ -13,4 +13,13 @@ public enum Months {
     public int getType() {
         return type;
     }
+
+    public static Months getByIntValueMonth(int i) {
+        for (Months a : Months.values()) {
+            if (i == a.getType()) {
+                return a;
+            }
+        }
+        throw new IllegalStateException("ERROR");
+    }
 }

@@ -6,6 +6,7 @@ import com.bruno.javafx.model.dao.GenericDao;
 import com.bruno.javafx.model.dao.MilkDao;
 import com.bruno.javafx.model.services.MilkService;
 import com.bruno.javafx.gui.util.Alerts;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,6 +16,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,6 +36,8 @@ public class MainViewController implements Initializable {
             controller.updateTableViewAll();
         });
     }
+
+
 
     private synchronized <T> void loadView(String path, Consumer<T> initAction) {
         try {
@@ -59,4 +63,5 @@ public class MainViewController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
+
 }

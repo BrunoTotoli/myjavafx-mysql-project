@@ -1,5 +1,6 @@
 package com.bruno.javafx.model.dao;
 
+import com.bruno.javafx.db.DB;
 import com.bruno.javafx.db.DBException;
 import com.bruno.javafx.model.entities.Milk;
 
@@ -17,9 +18,10 @@ public class MilkDao implements GenericDao<Milk> {
 
     @Override
     public void insert(Milk milk) {
+        PreparedStatement statement = null;
         try {
             if (connection != null) {
-                PreparedStatement statement = connection.prepareStatement("insert into milk(date_milk,quantity) values (?,?)");
+                statement = connection.prepareStatement("insert into milk(date_milk,quantity) values (?,?)");
                 statement.setDate(1, new Date(milk.getDate().getTime()));
                 statement.setDouble(2, milk.getQuantity());
                 statement.executeUpdate();
@@ -27,17 +29,19 @@ public class MilkDao implements GenericDao<Milk> {
         } catch (SQLException e) {
             throw new DBException(e.getMessage());
         } finally {
-
+            DB.closeStatement(statement);
         }
     }
 
     @Override
     public List<Milk> findAll() {
         List<Milk> milkList = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
             if (connection != null) {
-                PreparedStatement statement = connection.prepareStatement("select * from milk");
-                ResultSet resultSet = statement.executeQuery();
+                statement = connection.prepareStatement("select * from milk");
+                resultSet = statement.executeQuery();
 
                 while (resultSet.next()) {
                     Milk milk = new Milk(resultSet.getDate("date_milk"), resultSet.getDouble("quantity"));
@@ -48,18 +52,22 @@ public class MilkDao implements GenericDao<Milk> {
         } catch (SQLException e) {
             throw new DBException(e.getMessage());
         } finally {
-
+            DB.closeStatement(statement);
+            DB.closeResultSet(resultSet);
         }
         return milkList;
     }
+
     @Override
     public List<Milk> findSpecifiedMonth(int month) {
         List<Milk> milkList = new ArrayList<>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         try {
             if (connection != null) {
-                PreparedStatement statement = connection.prepareStatement("select id,date_milk,quantity from milk where MONTH(date_milk)= ?");
+                statement = connection.prepareStatement("select id,date_milk,quantity from milk where MONTH(date_milk)= ?");
                 statement.setInt(1, month);
-                ResultSet resultSet = statement.executeQuery();
+                resultSet = statement.executeQuery();
 
                 while (resultSet.next()) {
                     Milk milk = new Milk(resultSet.getDate("date_milk"), resultSet.getDouble("quantity"));
@@ -70,7 +78,8 @@ public class MilkDao implements GenericDao<Milk> {
         } catch (SQLException e) {
             throw new DBException(e.getMessage());
         } finally {
-
+            DB.closeStatement(statement);
+            DB.closeResultSet(resultSet);
         }
         return milkList;
     }
